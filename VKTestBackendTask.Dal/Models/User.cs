@@ -14,7 +14,7 @@ public class User
     [Column("password")] 
     public string Password { get; set; } = null!;
     
-    [Column("craeted_date")] 
+    [Column("created_date")] 
     public DateTime CreatedDate { get; set; }
     
     [Column("user_group_id")] 
