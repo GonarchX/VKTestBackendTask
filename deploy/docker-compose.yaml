@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  vk-test-backend-task-db:
+    container_name: vk-test-backend-task-db
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - vk-test-backend-task-db-data:/var/lib/postgresql/data
+
+volumes:
+  vk-test-backend-task-db-data:

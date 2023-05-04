@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKTestBackendTask.Bll", "VK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKTestBackendTask.Dal", "VKTestBackendTask.Dal\VKTestBackendTask.Dal.csproj", "{F2DF77F4-06F1-4FD6-80A8-974E2554FCB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{595B956C-8604-40CF-857F-197E14F64E7F}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\.env = deploy\.env
+		deploy\docker-compose.yaml = deploy\docker-compose.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
