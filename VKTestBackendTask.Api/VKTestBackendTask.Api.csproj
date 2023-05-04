@@ -17,4 +17,8 @@
       <Folder Include="Controllers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\VKTestBackendTask.Bll\VKTestBackendTask.Bll.csproj" />
+    </ItemGroup>
+
 </Project>
