@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>VKTestBackendTask.Api</RootNamespace>
+        <UserSecretsId>f18b47f0-f06f-46e1-a703-71ce2d99b100</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers" />
+      <Folder Include="Models" />
+      <Folder Include="Persistence\Repositories\Abstractions" />
+      <Folder Include="Persistence\Repositories\Implementations" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
+</Project>
