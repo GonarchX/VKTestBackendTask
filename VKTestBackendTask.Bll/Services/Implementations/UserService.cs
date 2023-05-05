@@ -1,3 +1,4 @@
+using ErrorOr;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Models;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
@@ -14,7 +15,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<User?> GetById(long userId)
+    public async Task<ErrorOr<User>> GetById(long userId)
     {
         return await _userRepository.GetAsync(userId);
     }

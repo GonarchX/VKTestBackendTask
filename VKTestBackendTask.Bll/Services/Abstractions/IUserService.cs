@@ -1,3 +1,4 @@
+using ErrorOr;
 using VKTestBackendTask.Dal.Models;
 
 namespace VKTestBackendTask.Bll.Services.Abstractions;
@@ -8,7 +9,7 @@ public interface IUserService
     /// Получить пользователя по идентификатору
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
-    Task<User?> GetById(long userId);
+    Task<ErrorOr<User>> GetById(long userId);
 
     /// <summary>
     /// Получить список пользователей, используя пагинацию

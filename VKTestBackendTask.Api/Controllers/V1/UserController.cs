@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Models;
 
-namespace VKTestBackendTask.Api.Controllers;
+namespace VKTestBackendTask.Api.Controllers.V1;
 
 [ApiController]
 [Route("[controller]")]
@@ -18,7 +18,12 @@ public class UserController : ControllerBase
     [HttpGet("users")]
     public async Task<User> GetById(long userId)
     {
-        return await _userService.GetById(userId);
+        var searchResult = await _userService.GetById(userId); 
+        
+        return  searchResult.Match(
+            searchResult => Ok(searchResult),
+            )
+            );
     }
 
     [HttpGet("users/{page:int}/{pageSize:int}")]
