@@ -52,4 +52,16 @@ public class UserController : ApiController
             _ => Problem(user.Errors)
         );
     }
+    
+    [HttpDelete]
+    public async Task<IActionResult> BlockUser(BlockUserRequest blockUserRequest)
+    {
+        var blockUserRequestDto = _mapper.Map<BlockUserRequestDto>(blockUserRequest);
+        var user = await _userService.BlockUser(blockUserRequestDto);
+
+        return user.Match(
+            result => Ok(result),
+            _ => Problem(user.Errors)
+        );
+    }
 }

@@ -29,8 +29,8 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
     {
         var user = await Entities
             .AsNoTracking()
-            .Include(u=>u.UserGroup)
-            .Include(u=>u.UserState)
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
             .Where(u => u.Id == userId)
             .FirstOrDefaultAsync();
 
@@ -49,11 +49,13 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
             .ToListAsync();
     }
 
-    public async Task<User?> IsExistUserWithSpecifiedGroup(UserGroup userGroup)
+    public async Task<List<User>> GetUsersFullInfoByGroup(UserGroup userGroup)
     {
         return await Entities
             .AsNoTracking()
-            .Where(u=>u.UserGroupId == userGroup.Id)
-            .FirstOrDefaultAsync();
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
+            .Where(u => u.UserGroupId == userGroup.Id)
+            .ToListAsync();
     }
 }

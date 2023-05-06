@@ -3,6 +3,7 @@ using MapsterMapper;
 using VKTestBackendTask.Bll.Common;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
+using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
 using VKTestBackendTask.Dal.Enums;
@@ -38,7 +39,7 @@ public class AuthService : IAuthService
 
     #region Register
 
-    public async Task<ErrorOr<RegisterResponseDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
+    public async Task<ErrorOr<UserDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
     {
         var adminGroup = await _userGroupRepository.GetByCode(UserGroupCode.Admin.ToString());
 
@@ -46,7 +47,7 @@ public class AuthService : IAuthService
         if (errorsOrUser.IsError)
             return errorsOrUser.Errors;
 
-        return _mapper.Map<RegisterResponseDto>(errorsOrUser);
+        return _mapper.Map<UserDto>(errorsOrUser);
     }
 
     public async Task<ErrorOr<User>> RegisterUser(
@@ -59,11 +60,11 @@ public class AuthService : IAuthService
             return Errors.Authentication.AlreadyExistedUser;
 
         if (userGroup.Code == UserGroupCode.Admin.ToString() &&
-            await IsAdminAlreadyExist(userGroup))
+            await IsNonBlockedAdminAlreadyExist(userGroup))
             return Errors.User.AdminAlreadyExist;
 
         var userState = await _userStateRepository.GetByCode(UserStateCode.Active.ToString());
-        
+
         var user = new User
         {
             Login = login,
@@ -84,9 +85,12 @@ public class AuthService : IAuthService
     // If we will have problems with performance,
     // we could create another table when we would have information about count of admins in our system
     // in order not to iterate over the entire user table every time
-    private async Task<bool> IsAdminAlreadyExist(UserGroup userGroup)
+    private async Task<bool> IsNonBlockedAdminAlreadyExist(UserGroup userGroup)
     {
-        return await _userRepository.IsExistUserWithSpecifiedGroup(userGroup) != null;
+        var admins = await _userRepository.GetUsersFullInfoByGroup(userGroup);
+
+        return admins.Count == 0 &&
+               admins.All(u => u.UserState!.Code == UserStateCode.Blocked.ToString());
     }
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)

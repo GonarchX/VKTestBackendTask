@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
     var configuration = builder.Configuration;
     builder.Services
         .AddApi()
-        .AddBll()
+        .AddBll(configuration)
         .AddDal(configuration);
 }
 

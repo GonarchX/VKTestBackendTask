@@ -24,4 +24,11 @@ public interface IUserService
     /// <param name="addUserRequestDto">Information for user creating</param>
     /// <returns>Created user</returns>
     Task<ErrorOr<UserDto>> AddUser(AddUserRequestDto addUserRequestDto);
+
+    /// <summary>
+    /// Block user
+    /// </summary>
+    /// <param name="blockUserRequestDto">Information about user to block him</param>
+    /// <returns>Blocked user</returns>
+    Task<ErrorOr<UserDto>> BlockUser(BlockUserRequestDto blockUserRequestDto);
 }

@@ -3,6 +3,7 @@ using MapsterMapper;
 using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
+using VKTestBackendTask.Dal.Enums;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
 
 namespace VKTestBackendTask.Bll.Services.Implementations;
@@ -61,5 +62,19 @@ public class UserService : IUserService
         await Task.Delay(5000); // Условия тестового задания, будем считать, что в этот промежуток происходит магия
 
         return _mapper.Map<UserDto>(errorsOrUser.Value);
+    }
+
+    public async Task<ErrorOr<UserDto>> BlockUser(BlockUserRequestDto blockUserRequestDto)
+    {
+        var user = await _userRepository.GetByLogin(blockUserRequestDto.Login);
+        if (user == null)
+            return Errors.User.NotFound;
+
+        user.UserState = await _userStateRepository.GetByCode(UserStateCode.Blocked.ToString());
+
+        _userRepository.Update(user);
+        await _userRepository.SaveChangesToDb();
+
+        return _mapper.Map<UserDto>(user);
     }
 }

@@ -7,6 +7,7 @@ namespace VKTestBackendTask.Bll.Services.Implementations;
 
 public sealed class PasswordHasher : IPasswordHasher
 {
+    private HashingOptions Options { get; }
     private const int SaltSize = 16; // 128 bit 
     private const int KeySize = 32; // 256 bit
 
@@ -15,7 +16,6 @@ public sealed class PasswordHasher : IPasswordHasher
         Options = options.Value;
     }
 
-    private HashingOptions Options { get; }
 
     public string Hash(string password)
     {
