@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using VKTestBackendTask.Dal.Enums;
 using VKTestBackendTask.Dal.Models;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
 
@@ -11,10 +10,10 @@ internal class UserStateRepository : BaseRepository<UserState>, IUserStateReposi
     {
     }
 
-    public async Task<UserState?> GetByCode(UserStateCode userStateCode)
+    public async Task<UserState?> GetByCode(string userStateCode)
     {
         return await Entities
-            .Where(ug => ug.Code == userStateCode.ToString())
+            .Where(ug => ug.Code == userStateCode)
             .FirstOrDefaultAsync();
     }
 }

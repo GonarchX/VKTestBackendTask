@@ -48,4 +48,12 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
             .Take(pageSize)
             .ToListAsync();
     }
+
+    public async Task<User?> IsExistUserWithSpecifiedGroup(UserGroup userGroup)
+    {
+        return await Entities
+            .AsNoTracking()
+            .Where(u=>u.UserGroupId == userGroup.Id)
+            .FirstOrDefaultAsync();
+    }
 }

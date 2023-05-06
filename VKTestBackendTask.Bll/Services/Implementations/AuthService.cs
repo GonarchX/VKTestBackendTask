@@ -38,41 +38,56 @@ public class AuthService : IAuthService
 
     #region Register
 
-    public async Task<ErrorOr<RegisterResponseDto>> Register(RegisterRequestDto registerRequestDto)
+    public async Task<ErrorOr<RegisterResponseDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
     {
-        var isAlreadyExistedUser = await _userRepository.IsAlreadyExistedUser(registerRequestDto.Login);
+        var adminGroup = await _userGroupRepository.GetByCode(UserGroupCode.Admin.ToString());
+
+        var errorsOrUser = await RegisterUser(registerRequestDto.Login, registerRequestDto.Password, adminGroup!);
+        if (errorsOrUser.IsError)
+            return errorsOrUser.Errors;
+
+        return _mapper.Map<RegisterResponseDto>(errorsOrUser);
+    }
+
+    public async Task<ErrorOr<User>> RegisterUser(
+        string login,
+        string password,
+        UserGroup userGroup)
+    {
+        var isAlreadyExistedUser = await _userRepository.IsAlreadyExistedUser(login);
         if (isAlreadyExistedUser)
             return Errors.Authentication.AlreadyExistedUser;
 
-        var defaultState = await _userStateRepository.GetByCode(UserStateCode.Active);
-        var defaultGroup = await _userGroupRepository.GetByCode(UserGroupCode.User);
+        if (userGroup.Code == UserGroupCode.Admin.ToString() &&
+            await IsAdminAlreadyExist(userGroup))
+            return Errors.User.AdminAlreadyExist;
 
-        var user = await RegisterUser(registerRequestDto, defaultState!, defaultGroup!);
-        await Task.Delay(5000); // Условия тестового задания, будем считать, что в этот промежуток происходит магия
-
-        return _mapper.Map<RegisterResponseDto>(user);
-    }
-
-    private async Task<User> RegisterUser(
-        RegisterRequestDto registerRequestDto,
-        UserState defaultState,
-        UserGroup defaultGroup)
-    {
+        var userState = await _userStateRepository.GetByCode(UserStateCode.Active.ToString());
+        
         var user = new User
         {
-            Login = registerRequestDto.Login,
-            Password = _passwordHasher.Hash(registerRequestDto.Password),
+            Login = login,
+            Password = _passwordHasher.Hash(password),
             CreatedDate = _dateTimeProvider.UtcNow(),
-            UserState = defaultState,
-            UserGroup = defaultGroup
+            UserState = userState,
+            UserGroup = userGroup
         };
 
         await _userRepository.Add(user);
         await _userRepository.SaveChangesToDb();
+
         return user;
     }
 
     #endregion
+
+    // If we will have problems with performance,
+    // we could create another table when we would have information about count of admins in our system
+    // in order not to iterate over the entire user table every time
+    private async Task<bool> IsAdminAlreadyExist(UserGroup userGroup)
+    {
+        return await _userRepository.IsExistUserWithSpecifiedGroup(userGroup) != null;
+    }
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
     {

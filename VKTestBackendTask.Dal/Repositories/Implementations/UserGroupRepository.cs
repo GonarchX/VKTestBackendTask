@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using VKTestBackendTask.Dal.Enums;
 using VKTestBackendTask.Dal.Models;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
 
@@ -11,10 +10,10 @@ internal class UserGroupRepository : BaseRepository<UserGroup>, IUserGroupReposi
     {
     }
 
-    public async Task<UserGroup?> GetByCode(UserGroupCode userGroupCode)
+    public async Task<UserGroup?> GetByCode(string userGroupCode)
     {
         return await Entities
-            .Where(ug => ug.Code == userGroupCode.ToString())
+            .Where(ug => ug.Code == userGroupCode)
             .FirstOrDefaultAsync();
     }
 }

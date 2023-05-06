@@ -1,5 +1,7 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using VKTestBackendTask.Api.Contracts.V1.UserController;
+using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Services.Abstractions;
 
 namespace VKTestBackendTask.Api.Controllers.V1;
@@ -39,15 +41,15 @@ public class UserController : ApiController
         return Ok(users);
     }
 
-    /*[HttpPost("register")]
+    [HttpPost]
     public async Task<IActionResult> AddUser(AddUserRequest addUserRequest)
     {
         var addUserRequestDto = _mapper.Map<AddUserRequestDto>(addUserRequest);
-        var user = await _userService.AddUser(addUserRequest);
+        var user = await _userService.AddUser(addUserRequestDto);
 
         return user.Match(
             result => Ok(result),
             _ => Problem(user.Errors)
         );
-    }*/
+    }
 }

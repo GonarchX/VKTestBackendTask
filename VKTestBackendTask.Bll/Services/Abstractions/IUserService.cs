@@ -6,15 +6,22 @@ namespace VKTestBackendTask.Bll.Services.Abstractions;
 public interface IUserService
 {
     /// <summary>
-    /// Получить пользователя по идентификатору
+    /// Get user by identifier
     /// </summary>
-    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="userId">User identifier</param>
     Task<ErrorOr<UserDto>> GetUserById(long userId);
 
     /// <summary>
-    /// Получить список пользователей, используя пагинацию
+    /// Get list of users using pagination
     /// </summary>
-    /// <param name="page">Номер страницы (отсчет начинается с 1)</param>
-    /// <param name="pageSize">Размер страницы</param>
+    /// <param name="page">Number of page (starts with 1)</param>
+    /// <param name="pageSize">Page size </param>
     Task<List<UserDto>> GetUsersByPage(int page = 1, int pageSize = 25);
+
+    /// <summary>
+    /// Add user
+    /// </summary>
+    /// <param name="addUserRequestDto">Information for user creating</param>
+    /// <returns>Created user</returns>
+    Task<ErrorOr<UserDto>> AddUser(AddUserRequestDto addUserRequestDto);
 }

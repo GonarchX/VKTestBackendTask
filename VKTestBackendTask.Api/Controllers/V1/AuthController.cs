@@ -22,11 +22,11 @@ public class AuthController : ApiController
         _mapper = mapper;
     }
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequest registerRequest)
+    [HttpPost("registerAsAdmin")]
+    public async Task<IActionResult> RegisterAsAdmin(RegisterRequest registerRequest)
     {
         var registerRequestDto = _mapper.Map<RegisterRequestDto>(registerRequest);
-        var user = await _authService.Register(registerRequestDto);
+        var user = await _authService.RegisterAsAdmin(registerRequestDto);
 
         return user.Match(
             result => Ok(result),
