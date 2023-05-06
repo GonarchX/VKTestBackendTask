@@ -17,7 +17,8 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         services.Configure<HashingOptions>(configuration.GetSection(nameof(HashingOptions)));
-        
+        services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
+
         return services;
     }
 }

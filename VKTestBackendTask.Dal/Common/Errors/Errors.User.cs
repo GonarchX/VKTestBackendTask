@@ -11,9 +11,9 @@ public static partial class Errors
             description: "User with specified parameters not found."
         );
 
-        public static Error AdminAlreadyExist => Error.NotFound(
-            code: "User.AdminAlreadyExist",
-            description: "User with admin role already exist."
+        public static Error AdminCountLimitExceeded => Error.NotFound(
+            code: "User.AdminCountLimit",
+            description: "Exceeded the limit on the number of administrators."
         );
     }
 }

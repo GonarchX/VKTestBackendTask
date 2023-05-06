@@ -1,9 +1,11 @@
 using ErrorOr;
 using MapsterMapper;
+using Microsoft.Extensions.Options;
 using VKTestBackendTask.Bll.Common;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
 using VKTestBackendTask.Bll.Dto.UserService;
+using VKTestBackendTask.Bll.Options;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
 using VKTestBackendTask.Dal.Enums;
@@ -20,6 +22,7 @@ public class AuthService : IAuthService
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserStateRepository _userStateRepository;
     private readonly IUserGroupRepository _userGroupRepository;
+    private readonly ApplicationSettings _applicationOptions;
 
     public AuthService(
         IMapper mapper,
@@ -27,7 +30,8 @@ public class AuthService : IAuthService
         IPasswordHasher passwordHasher,
         IDateTimeProvider dateTimeProvider,
         IUserStateRepository userStateRepository,
-        IUserGroupRepository userGroupRepository)
+        IUserGroupRepository userGroupRepository,
+        IOptionsSnapshot<ApplicationSettings> applicationOptions)
     {
         _mapper = mapper;
         _userRepository = userRepository;
@@ -35,6 +39,7 @@ public class AuthService : IAuthService
         _dateTimeProvider = dateTimeProvider;
         _userStateRepository = userStateRepository;
         _userGroupRepository = userGroupRepository;
+        _applicationOptions = applicationOptions.Value;
     }
 
     #region Register
@@ -47,7 +52,7 @@ public class AuthService : IAuthService
         if (errorsOrUser.IsError)
             return errorsOrUser.Errors;
 
-        return _mapper.Map<UserDto>(errorsOrUser);
+        return _mapper.Map<UserDto>(errorsOrUser.Value);
     }
 
     public async Task<ErrorOr<User>> RegisterUser(
@@ -59,11 +64,12 @@ public class AuthService : IAuthService
         if (isAlreadyExistedUser)
             return Errors.Authentication.AlreadyExistedUser;
 
-        if (userGroup.Code == UserGroupCode.Admin.ToString() &&
-            await IsNonBlockedAdminAlreadyExist(userGroup))
-            return Errors.User.AdminAlreadyExist;
-
         var userState = await _userStateRepository.GetByCode(UserStateCode.Active.ToString());
+
+        if (userGroup.Code == UserGroupCode.Admin.ToString() &&
+            await IsLimitByAdmins(userGroup, userState))
+            return Errors.User.AdminCountLimitExceeded;
+
 
         var user = new User
         {
@@ -85,12 +91,11 @@ public class AuthService : IAuthService
     // If we will have problems with performance,
     // we could create another table when we would have information about count of admins in our system
     // in order not to iterate over the entire user table every time
-    private async Task<bool> IsNonBlockedAdminAlreadyExist(UserGroup userGroup)
+    private async Task<bool> IsLimitByAdmins(UserGroup userGroup, UserState activeUserState)
     {
-        var admins = await _userRepository.GetUsersFullInfoByGroup(userGroup);
+        var admins = await _userRepository.GetActiveAdminsByGroup(userGroup, activeUserState);
 
-        return admins.Count == 0 &&
-               admins.All(u => u.UserState!.Code == UserStateCode.Blocked.ToString());
+        return admins.Count >= _applicationOptions.MaxAdminsCount;
     }
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
