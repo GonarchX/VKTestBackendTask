@@ -5,16 +5,16 @@ namespace VKTestBackendTask.Dal.Repositories.Implementations;
 
 internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    private readonly DbSet<TEntity> _entities;
+    protected readonly DbSet<TEntity> Entities;
 
     protected BaseRepository(ApplicationDbContext context)
     {
-        _entities = context.Set<TEntity>();
+        Entities = context.Set<TEntity>();
     }
 
     public virtual async Task<List<TEntity>> GetByPage(int page = 1, int pageSize = 25)
     {
-        return await _entities
+        return await Entities
             .AsNoTracking()
             .OrderBy(x => x)
             .Skip((page - 1) * pageSize)
@@ -24,31 +24,31 @@ internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity 
 
     public virtual async Task<TEntity?> Get(object entityKey)
     {
-        var entity = await _entities.FindAsync(entityKey);
-        if (entity != null) _entities.Entry(entity).State = EntityState.Detached;
+        var entity = await Entities.FindAsync(entityKey);
+        if (entity != null) Entities.Entry(entity).State = EntityState.Detached;
         return entity;
     }
 
     public virtual async Task<TEntity> Add(TEntity entity)
     {
-        await _entities.AddAsync(entity);
+        await Entities.AddAsync(entity);
         return entity;
     }
 
     public virtual async Task<List<TEntity>> AddRange(List<TEntity> entities)
     {
-        await _entities.AddRangeAsync(entities);
+        await Entities.AddRangeAsync(entities);
         return entities;
     }
 
     public virtual void Delete(TEntity entity)
     {
-        _entities.Remove(entity);
+        Entities.Remove(entity);
     }
 
     public virtual TEntity Update(TEntity entity)
     {
-        _entities.Update(entity);
+        Entities.Update(entity);
         return entity;
     }
 }
