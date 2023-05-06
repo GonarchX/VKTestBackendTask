@@ -64,7 +64,6 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
         var user = errorsOrUser.Value;
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Role, user.UserGroup!.Code)
         };
         var identity = new ClaimsIdentity(claims, Scheme.Name);
