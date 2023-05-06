@@ -4,17 +4,18 @@ using VKTestBackendTask.Bll.Services.Abstractions;
 namespace VKTestBackendTask.Api.Controllers.V1;
 
 [ApiController]
-[Route("[controller]")]
-public class UsersController : ApiController
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/users")]
+public class UserController : ApiController
 {
     private readonly IUserService _userService;
 
-    public UsersController(IUserService userService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
     }
 
-    [HttpGet("users/{userId:int}")]
+    [HttpGet("{userId:int}")]
     public async Task<IActionResult> GetById(long userId)
     {
         var user = await _userService.GetById(userId);
@@ -25,7 +26,7 @@ public class UsersController : ApiController
         );
     }
 
-    [HttpGet("users/{page:int}/{pageSize:int}")]
+    [HttpGet("{page:int}/{pageSize:int}")]
     public async Task<IActionResult> GetById(int page = 1, int pageSize = 25)
     {
         var users = await _userService.GetRange(page, pageSize);

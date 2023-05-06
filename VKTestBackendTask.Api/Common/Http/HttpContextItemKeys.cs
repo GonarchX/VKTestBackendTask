@@ -1,4 +1,4 @@
-namespace Omega.Kulibin.Api.Common.Http;
+namespace VKTestBackendTask.Api.Common.Http;
 
 public static class HttpContextItemKeys
 {

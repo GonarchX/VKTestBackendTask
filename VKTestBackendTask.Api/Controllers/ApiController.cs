@@ -1,6 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
-using Omega.Kulibin.Api.Common.Http;
+using VKTestBackendTask.Api.Common.Http;
 
 namespace VKTestBackendTask.Api.Controllers;
 

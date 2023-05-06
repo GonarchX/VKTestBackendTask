@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
-using Omega.Kulibin.Api.Common.Http;
+using VKTestBackendTask.Api.Common.Http;
 
 namespace VKTestBackendTask.Api.Common.Errors;
 
