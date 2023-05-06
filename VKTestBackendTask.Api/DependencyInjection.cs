@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using VKTestBackendTask.Api.Common.Errors;
+
 namespace VKTestBackendTask.Api;
 
 public static class DependencyInjection
@@ -5,6 +8,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
         services.AddApiVersioning();
+        services.AddSingleton<ProblemDetailsFactory, ApiProblemDetailsFactory>();
         
         return services;
     }
