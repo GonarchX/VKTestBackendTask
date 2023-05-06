@@ -1,4 +1,5 @@
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VKTestBackendTask.Api.Contracts.V1.UserController;
 using VKTestBackendTask.Bll.Dto.UserService;
@@ -8,6 +9,7 @@ namespace VKTestBackendTask.Api.Controllers.V1;
 
 [ApiController]
 [ApiVersion("1.0")]
+[Authorize(Roles = "Admin")]
 [Route("api/v{version:apiVersion}/users")]
 public class UserController : ApiController
 {

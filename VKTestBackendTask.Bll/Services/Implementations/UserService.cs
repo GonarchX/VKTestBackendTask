@@ -4,6 +4,7 @@ using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
 using VKTestBackendTask.Dal.Enums;
+using VKTestBackendTask.Dal.Models;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
 
 namespace VKTestBackendTask.Bll.Services.Implementations;
@@ -39,6 +40,16 @@ public class UserService : IUserService
             return Errors.User.NotFound;
 
         return _mapper.Map<UserDto>(user);
+    }
+
+    public async Task<ErrorOr<User>> GetUserFullInfoByLogin(string userLogin)
+    {
+        var user = await _userRepository.GetFullInfoByLogin(userLogin);
+
+        if (user == null)
+            return Errors.User.NotFound;
+
+        return user;
     }
 
     public async Task<List<UserDto>> GetUsersByPage(int page = 1, int pageSize = 25)

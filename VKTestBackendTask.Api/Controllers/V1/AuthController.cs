@@ -1,4 +1,5 @@
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VKTestBackendTask.Api.Contracts.V1.AuthController.Login;
 using VKTestBackendTask.Api.Contracts.V1.AuthController.Register;
@@ -10,6 +11,7 @@ namespace VKTestBackendTask.Api.Controllers.V1;
 
 [ApiController]
 [ApiVersion("1.0")]
+[AllowAnonymous]
 [Route("api/v{version:apiVersion}/auth")]
 public class AuthController : ApiController
 {

@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using VKTestBackendTask.Api.BasicAuth;
 using VKTestBackendTask.Api.Common.Errors;
 using VKTestBackendTask.Api.Common.Mapping;
 using VKTestBackendTask.Api.Swagger;
@@ -10,13 +12,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
+        services.AddAuthentication("BasicAuthentication")
+            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddCustomSwaggerGen();
         services.AddApiVersioning();
         services.AddSingleton<ProblemDetailsFactory, ApiProblemDetailsFactory>();
         services.AddMappings();
-        
+
         return services;
     }
 

@@ -59,4 +59,16 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
                         u.UserState!.Id == activeUserState.Id)
             .ToListAsync();
     }
+
+    public async Task<User?> GetFullInfoByLogin(string userLogin)
+    {
+        var user = await Entities
+            .AsNoTracking()
+            .Include(u=>u.UserGroup)
+            .Include(u=>u.UserState)
+            .Where(u => u.Login == userLogin)
+            .FirstOrDefaultAsync();
+
+        return user;
+    }
 }

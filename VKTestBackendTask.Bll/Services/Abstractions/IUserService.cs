@@ -1,5 +1,6 @@
 using ErrorOr;
 using VKTestBackendTask.Bll.Dto.UserService;
+using VKTestBackendTask.Dal.Models;
 
 namespace VKTestBackendTask.Bll.Services.Abstractions;
 
@@ -10,6 +11,12 @@ public interface IUserService
     /// </summary>
     /// <param name="userId">User identifier</param>
     Task<ErrorOr<UserDto>> GetUserById(long userId);
+
+    /// <summary>
+    /// Get user by login
+    /// </summary>
+    /// <param name="userLogin">User login</param>
+    Task<ErrorOr<User>> GetUserFullInfoByLogin(string userLogin);
 
     /// <summary>
     /// Get list of users using pagination
