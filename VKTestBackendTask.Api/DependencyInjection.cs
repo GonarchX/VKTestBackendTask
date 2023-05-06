@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using VKTestBackendTask.Api.Common.Errors;
+using VKTestBackendTask.Api.Common.Mapping;
 using VKTestBackendTask.Api.Swagger;
 
 namespace VKTestBackendTask.Api;
@@ -14,7 +15,8 @@ public static class DependencyInjection
         services.AddCustomSwaggerGen();
         services.AddApiVersioning();
         services.AddSingleton<ProblemDetailsFactory, ApiProblemDetailsFactory>();
-
+        services.AddMappings();
+        
         return services;
     }
 
