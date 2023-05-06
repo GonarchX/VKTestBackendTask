@@ -1,13 +1,14 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Omega.Kulibin.Api.Common.Http;
 
-namespace VKTestBackendTask.Api.Controllers.Common;
+namespace VKTestBackendTask.Api.Controllers;
 
 public class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)
     {
-        HttpContext.Items["errors"] = errors;
+        HttpContext.Items[HttpContextItemKeys.Errors] = errors;
         
         var firstError = errors.First();
 

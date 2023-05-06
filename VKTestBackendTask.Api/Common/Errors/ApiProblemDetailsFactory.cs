@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Omega.Kulibin.Api.Common.Http;
 
 namespace VKTestBackendTask.Api.Common.Errors;
 
@@ -91,9 +92,9 @@ public class ApiProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions["traceId"] = traceId;
         }
 
-        if (httpContext?.Items["errors"] is List<Error> errors)
+        if (httpContext?.Items[HttpContextItemKeys.Errors] is List<Error> errors)
         {
-            problemDetails.Extensions["errors"] = errors.Select(error => error.Code);
+            problemDetails.Extensions[HttpContextItemKeys.Errors] = errors.Select(error => error.Code);
         }
     }
 }

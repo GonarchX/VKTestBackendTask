@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using VKTestBackendTask.Api.Controllers.Common;
 using VKTestBackendTask.Bll.Services.Abstractions;
 
 namespace VKTestBackendTask.Api.Controllers.V1;

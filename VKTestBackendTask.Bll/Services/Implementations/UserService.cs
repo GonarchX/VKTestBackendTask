@@ -22,10 +22,9 @@ public class UserService : IUserService
 
         if (user == null)
             return Errors.User.NotFound;
-        
+
         return user;
     }
-
 
     public async Task<List<User>> GetRange(int page = 1, int pageSize = 25)
     {
