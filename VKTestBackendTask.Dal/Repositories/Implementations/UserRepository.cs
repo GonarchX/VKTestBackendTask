@@ -12,11 +12,16 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<bool> IsAlreadyExistedUser(string userLogin)
     {
+        return await GetByLogin(userLogin) != null;
+    }
+
+    public async Task<User?> GetByLogin(string userLogin)
+    {
         var user = await Entities
             .AsNoTracking()
             .Where(u => u.Login == userLogin)
             .FirstOrDefaultAsync();
 
-        return user != null;
+        return user;
     }
 }

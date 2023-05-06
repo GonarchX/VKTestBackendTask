@@ -1,6 +1,8 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using VKTestBackendTask.Api.Contracts.V1.AuthController;
+using VKTestBackendTask.Api.Contracts.V1.AuthController.Login;
+using VKTestBackendTask.Api.Contracts.V1.AuthController.Register;
+using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
 using VKTestBackendTask.Bll.Services.Abstractions;
 
@@ -13,7 +15,7 @@ public class AuthController : ApiController
 {
     private readonly IAuthService _authService;
     private readonly IMapper _mapper;
-    
+
     public AuthController(IAuthService authService, IMapper mapper)
     {
         _authService = authService;
@@ -31,16 +33,16 @@ public class AuthController : ApiController
             _ => Problem(user.Errors)
         );
     }
-    
-    /*[HttpPost("login")]
+
+    [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
         var loginRequestDto = _mapper.Map<LoginRequestDto>(loginRequest);
         var user = await _authService.Login(loginRequestDto);
 
         return user.Match(
-            result => Ok(result),
+            result => Ok(result.BasicCredentials),
             _ => Problem(user.Errors)
         );
-    }*/
+    }
 }

@@ -1,5 +1,6 @@
 using ErrorOr;
 using MapsterMapper;
+using VKTestBackendTask.Bll.Common;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
 using VKTestBackendTask.Bll.Services.Abstractions;
@@ -53,7 +54,7 @@ public class AuthService : IAuthService
     }
 
     private async Task<User> RegisterUser(
-        RegisterRequestDto registerRequestDto, 
+        RegisterRequestDto registerRequestDto,
         UserState defaultState,
         UserGroup defaultGroup)
     {
@@ -73,8 +74,19 @@ public class AuthService : IAuthService
 
     #endregion
 
-    public Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
+    public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.GetByLogin(loginRequestDto.Login);
+        if (user == null)
+            return Errors.User.NotFound;
+
+        if (!_passwordHasher.IsSamePasswords(user.Password, loginRequestDto.Password))
+            return Errors.Authentication.InvalidCredentials;
+
+        string basicCredentials = "Basic " + BasicAuthHelper.EncodeCredentials(
+            loginRequestDto.Login,
+            loginRequestDto.Password);
+
+        return new LoginResponseDto(basicCredentials);
     }
 }
