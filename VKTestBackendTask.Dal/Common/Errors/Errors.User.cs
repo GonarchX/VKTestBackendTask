@@ -4,11 +4,11 @@ namespace VKTestBackendTask.Dal.Common.Errors;
 
 public static partial class Errors
 {
-    public static partial class User
+    public static class User
     {
         public static Error NotFound => Error.NotFound(
             code: "User.NotFound",
-            description: "User with specified not found."
+            description: "User with specified parameters not found."
         );
     }
 }
