@@ -12,7 +12,7 @@ internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity 
         _entities = context.Set<TEntity>();
     }
 
-    public virtual async Task<List<TEntity>> GetByPageAsync(int page = 1, int pageSize = 25)
+    public virtual async Task<List<TEntity>> GetByPage(int page = 1, int pageSize = 25)
     {
         return await _entities
             .AsNoTracking()
@@ -22,20 +22,20 @@ internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity 
             .ToListAsync();
     }
 
-    public virtual async Task<TEntity?> GetAsync(object entityKey)
+    public virtual async Task<TEntity?> Get(object entityKey)
     {
         var entity = await _entities.FindAsync(entityKey);
         if (entity != null) _entities.Entry(entity).State = EntityState.Detached;
         return entity;
     }
 
-    public virtual async Task<TEntity> AddAsync(TEntity entity)
+    public virtual async Task<TEntity> Add(TEntity entity)
     {
         await _entities.AddAsync(entity);
         return entity;
     }
 
-    public virtual async Task<List<TEntity>> AddRangeAsync(List<TEntity> entities)
+    public virtual async Task<List<TEntity>> AddRange(List<TEntity> entities)
     {
         await _entities.AddRangeAsync(entities);
         return entities;
