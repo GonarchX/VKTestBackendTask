@@ -1,3 +1,4 @@
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using VKTestBackendTask.Bll.Services.Abstractions;
 
@@ -9,16 +10,20 @@ namespace VKTestBackendTask.Api.Controllers.V1;
 public class UserController : ApiController
 {
     private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserService userService)
+    public UserController(
+        IUserService userService,
+        IMapper mapper)
     {
-        _userService = userService;
+        _userService = userService;;
+        _mapper = mapper;
     }
 
     [HttpGet("{userId:int}")]
-    public async Task<IActionResult> GetById(long userId)
+    public async Task<IActionResult> GetUserById(long userId)
     {
-        var user = await _userService.GetById(userId);
+        var user = await _userService.GetUserById(userId);
 
         return user.Match(
             result => Ok(result),
@@ -27,10 +32,22 @@ public class UserController : ApiController
     }
 
     [HttpGet("{page:int}/{pageSize:int}")]
-    public async Task<IActionResult> GetById(int page = 1, int pageSize = 25)
+    public async Task<IActionResult> GetUsersByPage(int page = 1, int pageSize = 25)
     {
-        var users = await _userService.GetRange(page, pageSize);
-        
+        var users = await _userService.GetUsersByPage(page, pageSize);
+
         return Ok(users);
     }
+
+    /*[HttpPost("register")]
+    public async Task<IActionResult> AddUser(AddUserRequest addUserRequest)
+    {
+        var addUserRequestDto = _mapper.Map<AddUserRequestDto>(addUserRequest);
+        var user = await _userService.AddUser(addUserRequest);
+
+        return user.Match(
+            result => Ok(result),
+            _ => Problem(user.Errors)
+        );
+    }*/
 }

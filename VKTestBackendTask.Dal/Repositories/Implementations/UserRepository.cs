@@ -24,4 +24,28 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
 
         return user;
     }
+
+    public async Task<User?> GetByIdWithFullInfo(long userId)
+    {
+        var user = await Entities
+            .AsNoTracking()
+            .Include(u=>u.UserGroup)
+            .Include(u=>u.UserState)
+            .Where(u => u.Id == userId)
+            .FirstOrDefaultAsync();
+
+        return user;
+    }
+
+    public async Task<List<User>> GetByPageWithFullInfo(int page, int pageSize)
+    {
+        return await Entities
+            .AsNoTracking()
+            .Include(u => u.UserGroup)
+            .Include(u => u.UserState)
+            .OrderBy(x => x)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
 }

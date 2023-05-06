@@ -1,7 +1,8 @@
 using ErrorOr;
+using MapsterMapper;
+using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
-using VKTestBackendTask.Dal.Models;
 using VKTestBackendTask.Dal.Repositories.Abstractions;
 
 namespace VKTestBackendTask.Bll.Services.Implementations;
@@ -10,24 +11,26 @@ namespace VKTestBackendTask.Bll.Services.Implementations;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
-    public async Task<ErrorOr<User>> GetById(long userId)
+    public async Task<ErrorOr<UserDto>> GetUserById(long userId)
     {
-        var user = await _userRepository.Get(userId);
+        var user = await _userRepository.GetByIdWithFullInfo(userId);
 
         if (user == null)
             return Errors.User.NotFound;
 
-        return user;
+        return _mapper.Map<UserDto>(user);
     }
 
-    public async Task<List<User>> GetRange(int page = 1, int pageSize = 25)
+    public async Task<List<UserDto>> GetUsersByPage(int page = 1, int pageSize = 25)
     {
-        return await _userRepository.GetByPage(page, pageSize);
+        return _mapper.Map<List<UserDto>>(await _userRepository.GetByPageWithFullInfo(page, pageSize));
     }
 }
