@@ -5,7 +5,7 @@ namespace VKTestBackendTask.Api.Controllers.Common;
 
 public class ApiController : ControllerBase
 {
-    public IActionResult Problem(List<Error> errors)
+    protected IActionResult Problem(List<Error> errors)
     {
         HttpContext.Items["errors"] = errors;
         
