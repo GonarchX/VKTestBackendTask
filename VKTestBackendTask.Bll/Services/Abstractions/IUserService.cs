@@ -28,7 +28,7 @@ public interface IUserService
     /// <summary>
     /// Block user
     /// </summary>
-    /// <param name="blockUserRequestDto">Information about user to block him</param>
+    /// <param name="blockUserRequestDto">User ID to block him</param>
     /// <returns>Blocked user</returns>
-    Task<ErrorOr<UserDto>> BlockUser(BlockUserRequestDto blockUserRequestDto);
+    Task<ErrorOr<UserDto>> BlockUser(long userId);
 }

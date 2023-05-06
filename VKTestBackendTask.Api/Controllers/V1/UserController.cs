@@ -53,11 +53,10 @@ public class UserController : ApiController
         );
     }
     
-    [HttpDelete]
-    public async Task<IActionResult> BlockUser(BlockUserRequest blockUserRequest)
+    [HttpDelete("{userId:long}")]
+    public async Task<IActionResult> BlockUser(long userId)
     {
-        var blockUserRequestDto = _mapper.Map<BlockUserRequestDto>(blockUserRequest);
-        var user = await _userService.BlockUser(blockUserRequestDto);
+        var user = await _userService.BlockUser(userId);
 
         return user.Match(
             result => Ok(result),

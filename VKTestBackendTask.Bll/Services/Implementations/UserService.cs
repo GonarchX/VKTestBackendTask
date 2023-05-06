@@ -64,9 +64,9 @@ public class UserService : IUserService
         return _mapper.Map<UserDto>(errorsOrUser.Value);
     }
 
-    public async Task<ErrorOr<UserDto>> BlockUser(BlockUserRequestDto blockUserRequestDto)
+    public async Task<ErrorOr<UserDto>> BlockUser(long userId)
     {
-        var user = await _userRepository.GetByLogin(blockUserRequestDto.Login);
+        var user = await _userRepository.Get(userId);
         if (user == null)
             return Errors.User.NotFound;
 
