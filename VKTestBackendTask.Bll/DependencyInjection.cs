@@ -9,6 +9,9 @@ public static class DependencyInjection
     public static IServiceCollection AddBll(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
         return services;
     }

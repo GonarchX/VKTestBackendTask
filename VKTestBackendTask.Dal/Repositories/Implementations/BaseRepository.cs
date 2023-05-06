@@ -6,10 +6,12 @@ namespace VKTestBackendTask.Dal.Repositories.Implementations;
 internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
     protected readonly DbSet<TEntity> Entities;
+    private readonly DbContext _context;
 
-    protected BaseRepository(ApplicationDbContext context)
+    protected BaseRepository(ApplicationDbContext context) 
     {
         Entities = context.Set<TEntity>();
+        _context = context;
     }
 
     public virtual async Task<List<TEntity>> GetByPage(int page = 1, int pageSize = 25)
@@ -50,5 +52,10 @@ internal class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity 
     {
         Entities.Update(entity);
         return entity;
+    }
+
+    public async Task SaveChangesToDb()
+    {
+        await _context.SaveChangesAsync();
     }
 }

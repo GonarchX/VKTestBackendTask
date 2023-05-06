@@ -13,6 +13,8 @@ public static class DependencyInjection
         var connectionString = configuration["ConnectionStrings:Default"];
         services.AddDbContext<ApplicationDbContext>(options => { options.UseNpgsql(connectionString); });
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserStateRepository, UserStateRepository>();
+        services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 
         return services;
     }

@@ -8,6 +8,10 @@ using VKTestBackendTask.Api.Common.Http;
 
 namespace VKTestBackendTask.Api.Common.Errors;
 
+/// <summary>
+/// This is copied implementation of the real <see cref="ProblemDetailsFactory"/>> inheritor <br/>
+/// which is extended to output all types of errors in the response 
+/// </summary>
 public class ApiProblemDetailsFactory : ProblemDetailsFactory
 {
     private readonly ApiBehaviorOptions _options;
@@ -92,6 +96,7 @@ public class ApiProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions["traceId"] = traceId;
         }
 
+        // Here we are add all errors to the response from our application while we processing request
         if (httpContext?.Items[HttpContextItemKeys.Errors] is List<Error> errors)
         {
             problemDetails.Extensions[HttpContextItemKeys.Errors] = errors.Select(error => error.Code);

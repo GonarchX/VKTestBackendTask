@@ -8,4 +8,5 @@ public interface IBaseRepository<T>
     Task<List<T>> AddRange(List<T> entities);
     void Delete(T entity);
     T Update(T entity);
+    Task SaveChangesToDb();
 }
