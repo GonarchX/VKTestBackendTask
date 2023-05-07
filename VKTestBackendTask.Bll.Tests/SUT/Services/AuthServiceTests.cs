@@ -16,11 +16,12 @@ public class AuthServiceTests
     {
         // Arrange
         var defaultUserGroupCode = UserGroupCode.User.ToString();
+        var defaultUserStateCode = UserStateCode.Active.ToString();
         var (login, password, userGroupCode) = AuthServiceTestsHelper.GetDefaultUserCredentials();
 
         var mockUserRepository = new Mock<IUserRepository>();
         var mockUserStateRepository = AuthServiceTestsHelper
-            .CreateMockUserStateRepositoryWithSpecifiedGroup(userGroupCode);
+            .CreateMockUserStateRepositoryWithSpecifiedGroup(defaultUserStateCode);
 
         var mockUserGroupRepository = AuthServiceTestsHelper
             .CreateMockUserGroupRepositoryWithSpecifiedGroup(defaultUserGroupCode);
@@ -43,6 +44,7 @@ public class AuthServiceTests
     {
         // Arrange
         var defaultUserGroupCode = UserGroupCode.User.ToString();
+        var defaultUserStateCode = UserStateCode.Active.ToString();
         var (login, password, userGroupCode) = AuthServiceTestsHelper.GetDefaultUserCredentials();
 
         var mockUserRepository = new Mock<IUserRepository>();
@@ -51,7 +53,7 @@ public class AuthServiceTests
             .ReturnsAsync(true);
 
         var mockUserStateRepository = AuthServiceTestsHelper
-            .CreateMockUserStateRepositoryWithSpecifiedGroup(userGroupCode);
+            .CreateMockUserStateRepositoryWithSpecifiedGroup(defaultUserStateCode);
 
         var mockUserGroupRepository = AuthServiceTestsHelper
             .CreateMockUserGroupRepositoryWithSpecifiedGroup(defaultUserGroupCode);
@@ -99,7 +101,7 @@ public class AuthServiceTests
     public async Task RegisterUser_OverAdminLimit_ReturnError(int adminCurrentCount, int maxAdminNumber)
     {
         // Arrange
-        var (login, password, userGroupCode) = AuthServiceTestsHelper.GetDefaultAdminCredentials();
+        var (login, password, adminGroupCode) = AuthServiceTestsHelper.GetDefaultAdminCredentials();
         var defaultUserStateCode = UserStateCode.Active.ToString();
 
         var mockUserRepository = new Mock<IUserRepository>();
@@ -113,7 +115,7 @@ public class AuthServiceTests
             .CreateMockUserStateRepositoryWithSpecifiedGroup(defaultUserStateCode);
 
         var mockUserGroupRepository = AuthServiceTestsHelper
-            .CreateMockUserGroupRepositoryWithSpecifiedGroup(userGroupCode);
+            .CreateMockUserGroupRepositoryWithSpecifiedGroup(adminGroupCode);
 
         var authService = AuthServiceTestsHelper.CreateMockAuthService(
             mockUserRepository.Object,
@@ -122,7 +124,7 @@ public class AuthServiceTests
             maxAdminCount: maxAdminNumber);
 
         // Act
-        await authService.RegisterUser(login, password, userGroupCode);
+        await authService.RegisterUser(login, password, adminGroupCode);
 
         // Assert
         mockUserRepository.Verify(x => x.Add(It.IsAny<User>()), Times.Once);
@@ -132,11 +134,10 @@ public class AuthServiceTests
     [InlineData(11, 10)]
     [InlineData(1, 0)]
     [InlineData(43, 42)]
-    public async Task RegisterUser_LessAdminLimit_CreateNewUser(int adminCurrentCount, int maxAdminNumber)
+    public async Task RegisterUser_LessAdminLimit_ReturnError(int adminCurrentCount, int maxAdminNumber)
     {
         // Arrange
-        var (login, password, userGroupCode) = AuthServiceTestsHelper.GetDefaultAdminCredentials();
-        var adminGroupCode = UserGroupCode.Admin.ToString();
+        var (login, password, adminGroupCode) = AuthServiceTestsHelper.GetDefaultAdminCredentials();
         var defaultUserStateCode = UserStateCode.Active.ToString();
 
         var mockUserRepository = new Mock<IUserRepository>();
@@ -145,10 +146,12 @@ public class AuthServiceTests
                 It.IsAny<UserGroup>(),
                 It.IsAny<UserState>()))
             .ReturnsAsync(Enumerable.Repeat<User>(null!, adminCurrentCount).ToList());
+        
         var mockUserStateRepository = AuthServiceTestsHelper
             .CreateMockUserStateRepositoryWithSpecifiedGroup(defaultUserStateCode);
+        
         var mockUserGroupRepository = AuthServiceTestsHelper
-            .CreateMockUserGroupRepositoryWithSpecifiedGroup(userGroupCode);
+            .CreateMockUserGroupRepositoryWithSpecifiedGroup(adminGroupCode);
 
         var authService = AuthServiceTestsHelper.CreateMockAuthService(
             mockUserRepository.Object,

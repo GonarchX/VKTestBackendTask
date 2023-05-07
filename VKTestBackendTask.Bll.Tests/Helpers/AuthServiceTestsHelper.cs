@@ -1,5 +1,3 @@
-using Mapster;
-using MapsterMapper;
 using Microsoft.Extensions.Options;
 using Moq;
 using VKTestBackendTask.Bll.Options;
@@ -65,21 +63,12 @@ public static class AuthServiceTestsHelper
         return mockUserStateRepository;
     }
 
-    internal static Mapper CreateMapper()
-    {
-        var config = TypeAdapterConfig.GlobalSettings;
-        config.Scan(typeof(UserService).Assembly);
-        var mapper = new Mapper(config);
-        return mapper;
-    }
-
     internal static IAuthService CreateMockAuthService(
         IUserRepository userRepository,
         IUserStateRepository userStateRepository,
         IUserGroupRepository userGroupRepository,
         int maxAdminCount)
     {
-        IMapper mapper = CreateMapper();
         var mockPasswordHasher = new Mock<IPasswordHasher>().Object;
         var mockDateTimeProvider = new Mock<IDateTimeProvider>().Object;
         var mockApplicationOptions = new Mock<IOptionsSnapshot<ApplicationSettings>>();
@@ -88,7 +77,7 @@ public static class AuthServiceTestsHelper
             .Returns(new ApplicationSettings { MaxAdminsCount = maxAdminCount });
 
         var mockAuthService = new AuthService(
-            mapper,
+            CommonTestsHelper.CreateMapper(),
             userRepository,
             mockPasswordHasher,
             mockDateTimeProvider,

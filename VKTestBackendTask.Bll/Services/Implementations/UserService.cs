@@ -54,7 +54,9 @@ public class UserService : IUserService
 
     public async Task<List<UserDto>> GetUsersByPage(int page = 1, int pageSize = 25)
     {
-        return _mapper.Map<List<UserDto>>(await _userRepository.GetByPageWithFullInfo(page, pageSize));
+        var usersByPage = await _userRepository.GetByPageWithFullInfo(page, pageSize);
+
+        return _mapper.Map<List<UserDto>>(usersByPage);
     }
 
     public async Task<ErrorOr<UserDto>> AddUser(AddUserRequestDto addUserRequestDto)
