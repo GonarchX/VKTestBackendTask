@@ -63,7 +63,7 @@ public class AuthService : IAuthService
     {
         var isAlreadyExistedUser = await _userRepository.IsAlreadyExistedUser(login);
         if (isAlreadyExistedUser)
-            return Errors.Authentication.AlreadyExistedUser;
+            return Errors.Auth.AlreadyExistedUser;
 
         var userGroup = await _userGroupRepository.GetByCode(userGroupCode);
         if (userGroup == null)
@@ -110,7 +110,7 @@ public class AuthService : IAuthService
             return Errors.User.NotFound;
 
         if (!_passwordHasher.IsSamePasswords(user.Password, loginRequestDto.Password))
-            return Errors.Authentication.InvalidCredentials;
+            return Errors.Auth.InvalidCredentials;
 
         string basicCredentials = "Basic " + BasicAuthHelper.EncodeCredentials(
             loginRequestDto.Login,
