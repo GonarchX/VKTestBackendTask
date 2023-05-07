@@ -76,9 +76,7 @@ public static class AuthServiceTestsHelper
             .Setup(o => o.Value)
             .Returns(new ApplicationSettings { MaxAdminsCount = maxAdminCount });
 
-        var mockAuthService = new AuthService(
-            CommonTestsHelper.CreateMapper(),
-            userRepository,
+        var mockAuthService = new AuthService(userRepository,
             mockPasswordHasher,
             mockDateTimeProvider,
             userStateRepository,

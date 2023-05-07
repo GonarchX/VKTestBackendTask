@@ -15,20 +15,17 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     private readonly IUserStateRepository _userStateRepository;
-    private readonly IUserGroupRepository _userGroupRepository;
     private readonly IAuthService _authService;
 
     public UserService(
         IUserRepository userRepository,
         IMapper mapper,
         IUserStateRepository userStateRepository,
-        IUserGroupRepository userGroupRepository,
         IAuthService authService)
     {
         _userRepository = userRepository;
         _mapper = mapper;
         _userStateRepository = userStateRepository;
-        _userGroupRepository = userGroupRepository;
         _authService = authService;
     }
 

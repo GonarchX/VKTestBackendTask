@@ -18,7 +18,6 @@ public class UserServiceTestsHelper
             mockUserRepository,
             mapper,
             mockUserStateRepository,
-            mockUserGroupRepository,
             AuthServiceTestsHelper.CreateMockAuthService(
                 mockUserRepository,
                 mockUserStateRepository,

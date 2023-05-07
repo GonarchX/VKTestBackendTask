@@ -35,7 +35,7 @@ public class ConfigureSwaggerOptions : IConfigureNamedOptions<SwaggerGenOptions>
     /// <summary>
     /// Configure Swagger Options. Inherited from the Interface
     /// </summary>
-    public void Configure(string name, SwaggerGenOptions options)
+    public void Configure(string? name, SwaggerGenOptions options)
     {
         Configure(options);
     }

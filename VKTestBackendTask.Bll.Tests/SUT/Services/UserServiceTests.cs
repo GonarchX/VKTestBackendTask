@@ -63,7 +63,6 @@ public class UserServiceTests
             mockUserRepository.Object,
             mapper,
             mockUserStateRepository.Object,
-            mockUserGroupRepository.Object,
             AuthServiceTestsHelper.CreateMockAuthService(
                 mockUserRepository.Object,
                 mockUserStateRepository.Object,
@@ -173,7 +172,6 @@ public class UserServiceTests
             mockUserRepository.Object,
             mapper,
             mockUserStateRepository.Object,
-            mockUserGroupRepository.Object,
             AuthServiceTestsHelper.CreateMockAuthService(
                 mockUserRepository.Object,
                 mockUserStateRepository.Object,

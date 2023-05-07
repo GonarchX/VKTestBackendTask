@@ -18,7 +18,7 @@ public class ApiProblemDetailsFactory : ProblemDetailsFactory
 
     public ApiProblemDetailsFactory(IOptions<ApiBehaviorOptions> options)
     {
-        _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        _options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     public override ProblemDetails CreateProblemDetails(
@@ -90,14 +90,14 @@ public class ApiProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Type ??= clientErrorData.Link;
         }
 
-        var traceId = Activity.Current?.Id ?? httpContext?.TraceIdentifier;
+        var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
         if (traceId != null)
         {
             problemDetails.Extensions["traceId"] = traceId;
         }
 
         // Here we are add all errors to the response from our application while we processing request
-        if (httpContext?.Items[HttpContextItemKeys.Errors] is List<Error> errors)
+        if (httpContext.Items[HttpContextItemKeys.Errors] is List<Error> errors)
         {
             problemDetails.Extensions[HttpContextItemKeys.Errors] = errors.Select(error => error.Code);
         }

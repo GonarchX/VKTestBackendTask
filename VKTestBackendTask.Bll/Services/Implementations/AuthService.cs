@@ -1,5 +1,4 @@
 using ErrorOr;
-using MapsterMapper;
 using Microsoft.Extensions.Options;
 using VKTestBackendTask.Bll.Common;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
@@ -15,7 +14,6 @@ namespace VKTestBackendTask.Bll.Services.Implementations;
 
 public class AuthService : IAuthService
 {
-    private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -23,16 +21,13 @@ public class AuthService : IAuthService
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly ApplicationSettings _applicationOptions;
 
-    public AuthService(
-        IMapper mapper,
-        IUserRepository userRepository,
+    public AuthService(IUserRepository userRepository,
         IPasswordHasher passwordHasher,
         IDateTimeProvider dateTimeProvider,
         IUserStateRepository userStateRepository,
         IUserGroupRepository userGroupRepository,
         IOptionsSnapshot<ApplicationSettings> applicationOptions)
     {
-        _mapper = mapper;
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _dateTimeProvider = dateTimeProvider;
