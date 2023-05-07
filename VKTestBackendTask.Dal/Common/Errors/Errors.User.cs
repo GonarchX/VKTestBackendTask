@@ -13,7 +13,7 @@ public static partial class Errors
 
         public static Error AdminCountLimitExceeded => Error.NotFound(
             code: "User.AdminCountLimit",
-            description: "Exceeded the limit on the number of administrators."
+            description: "Exceeded the limit of the number of administrators."
         );
     }
 }

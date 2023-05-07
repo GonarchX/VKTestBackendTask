@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using VKTestBackendTask.Bll.Common;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
-using VKTestBackendTask.Bll.Dto.UserService;
 using VKTestBackendTask.Bll.Options;
 using VKTestBackendTask.Bll.Services.Abstractions;
 using VKTestBackendTask.Dal.Common.Errors;
@@ -44,7 +43,7 @@ public class AuthService : IAuthService
 
     #region Register
 
-    public async Task<ErrorOr<UserDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
+    public async Task<ErrorOr<string>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
     {
         var errorsOrUser = await RegisterUser(
             registerRequestDto.Login,
@@ -53,7 +52,7 @@ public class AuthService : IAuthService
         if (errorsOrUser.IsError)
             return errorsOrUser.Errors;
 
-        return _mapper.Map<UserDto>(errorsOrUser.Value);
+        return BasicAuthHelper.EncodeCredentials(registerRequestDto.Login, registerRequestDto.Password);
     }
 
     public async Task<ErrorOr<User>> RegisterUser(
@@ -105,7 +104,7 @@ public class AuthService : IAuthService
     {
         var user = await _userRepository.GetByLogin(loginRequestDto.Login);
         if (user == null)
-            return Errors.User.NotFound;
+            return Errors.Auth.InvalidCredentials;
 
         if (!_passwordHasher.IsSamePasswords(user.Password, loginRequestDto.Password))
             return Errors.Auth.InvalidCredentials;

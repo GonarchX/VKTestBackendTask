@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -46,7 +47,7 @@ public static class SwaggerDocGenerator
 
     private static void AddXmlComments(this SwaggerGenOptions swagger)
     {
-        // var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        // swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     }
 }

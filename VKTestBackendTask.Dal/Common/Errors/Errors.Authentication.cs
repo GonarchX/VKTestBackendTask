@@ -7,7 +7,7 @@ public partial class Errors
     public static class Auth
     {
         public static Error InvalidCredentials => Error.Conflict(
-            code: "Auth.InvalidCred",
+            code: "Auth.InvalidCredentials",
             description: "Invalid credentials."
         );
 

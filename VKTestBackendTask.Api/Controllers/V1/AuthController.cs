@@ -1,3 +1,5 @@
+using System.Net;
+using ErrorOr;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +25,23 @@ public class AuthController : ApiController
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Register new admin with provided credentials
+    /// </summary>
+    /// <param name="registerRequest">Credentials to register new user</param>
+    /// <response code="409">
+    /// User with specified login already exists: <br/>
+    /// Code: **Auth.AlreadyExistedUser** <br/>
+    /// If count of admins exceeded: <br/>
+    /// Code: **Auth.AdminCountLimitExceeded**
+    /// </response>
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [HttpPost("registerAsAdmin")]
     public async Task<IActionResult> RegisterAsAdmin(RegisterRequest registerRequest)
     {
         var registerRequestDto = _mapper.Map<RegisterRequestDto>(registerRequest);
-        var user = await _authService.RegisterAsAdmin(registerRequestDto);
+        var user = await _authService.RegisterAsAdmin(registerRequestDto); // TODO: возвращать string
 
         return user.Match(
             result => Ok(result),
@@ -35,6 +49,16 @@ public class AuthController : ApiController
         );
     }
 
+    /// <summary>
+    /// Login with provided credentials
+    /// </summary>
+    /// <param name="loginRequest">Credentials to login</param>
+    /// <response code="409">
+    /// Can't find user with provided credentials or provided invalid credentials: <br/>
+    /// Code: **Auth.InvalidCredentials** <br/>
+    /// </response>
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
