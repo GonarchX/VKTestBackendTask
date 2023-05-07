@@ -9,7 +9,7 @@ public static class BasicAuthHelper
     public static string EncodeCredentials(string login, string password)
     {
         var valueBytes = Encoding.UTF8.GetBytes(login + CredentialsDelimiter + password);
-        return Convert.ToBase64String(valueBytes);
+        return "Basic " + Convert.ToBase64String(valueBytes);
     }
 
     public static string DecodeCredentials(string encodedCredentials)

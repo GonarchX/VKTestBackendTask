@@ -104,7 +104,7 @@ public class AuthService : IAuthService
         if (!_passwordHasher.IsSamePasswords(user.Password, loginRequestDto.Password))
             return Errors.Auth.InvalidCredentials;
 
-        string basicCredentials = "Basic " + BasicAuthHelper.EncodeCredentials(
+        string basicCredentials = BasicAuthHelper.EncodeCredentials(
             loginRequestDto.Login,
             loginRequestDto.Password);
 

@@ -41,7 +41,7 @@ public class AuthController : ApiController
     public async Task<IActionResult> RegisterAsAdmin(RegisterRequest registerRequest)
     {
         var registerRequestDto = _mapper.Map<RegisterRequestDto>(registerRequest);
-        var user = await _authService.RegisterAsAdmin(registerRequestDto); // TODO: возвращать string
+        var user = await _authService.RegisterAsAdmin(registerRequestDto);
 
         return user.Match(
             result => Ok(result),
