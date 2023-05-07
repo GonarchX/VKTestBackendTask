@@ -46,9 +46,10 @@ public class AuthService : IAuthService
 
     public async Task<ErrorOr<UserDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto)
     {
-        var adminGroup = await _userGroupRepository.GetByCode(UserGroupCode.Admin.ToString());
-
-        var errorsOrUser = await RegisterUser(registerRequestDto.Login, registerRequestDto.Password, adminGroup!);
+        var errorsOrUser = await RegisterUser(
+            registerRequestDto.Login,
+            registerRequestDto.Password,
+            UserGroupCode.Admin.ToString());
         if (errorsOrUser.IsError)
             return errorsOrUser.Errors;
 
@@ -58,11 +59,15 @@ public class AuthService : IAuthService
     public async Task<ErrorOr<User>> RegisterUser(
         string login,
         string password,
-        UserGroup userGroup)
+        string userGroupCode)
     {
         var isAlreadyExistedUser = await _userRepository.IsAlreadyExistedUser(login);
         if (isAlreadyExistedUser)
             return Errors.Authentication.AlreadyExistedUser;
+
+        var userGroup = await _userGroupRepository.GetByCode(userGroupCode);
+        if (userGroup == null)
+            return Errors.UserGroup.NotFound;
 
         var userState = await _userStateRepository.GetByCode(UserStateCode.Active.ToString());
 
@@ -86,8 +91,6 @@ public class AuthService : IAuthService
         return user;
     }
 
-    #endregion
-
     // If we will have problems with performance,
     // we could create another table when we would have information about count of admins in our system
     // in order not to iterate over the entire user table every time
@@ -97,6 +100,8 @@ public class AuthService : IAuthService
 
         return admins.Count >= _applicationOptions.MaxAdminsCount;
     }
+
+    #endregion
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
     {

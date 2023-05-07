@@ -59,14 +59,10 @@ public class UserService : IUserService
 
     public async Task<ErrorOr<UserDto>> AddUser(AddUserRequestDto addUserRequestDto)
     {
-        var userGroup = await _userGroupRepository.GetByCode(addUserRequestDto.UserGroupCode);
-        if (userGroup == null)
-            return Errors.UserGroup.NotFound;
-
         var errorsOrUser = await _authService.RegisterUser(
             addUserRequestDto.Login,
             addUserRequestDto.Password,
-            userGroup);
+            addUserRequestDto.UserGroupCode);
         if (errorsOrUser.IsError)
             return errorsOrUser.Errors;
 

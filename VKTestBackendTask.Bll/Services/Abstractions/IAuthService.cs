@@ -9,6 +9,6 @@ namespace VKTestBackendTask.Bll.Services.Abstractions;
 public interface IAuthService
 {
     Task<ErrorOr<UserDto>> RegisterAsAdmin(RegisterRequestDto registerRequestDto);
-    Task<ErrorOr<User>> RegisterUser(string login, string password, UserGroup userGroup);
+    Task<ErrorOr<User>> RegisterUser(string login, string password, string userGroupCode);
     Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto loginRequestDto);
 }
