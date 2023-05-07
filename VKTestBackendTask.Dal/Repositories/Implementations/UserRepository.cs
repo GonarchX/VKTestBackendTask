@@ -49,14 +49,14 @@ internal class UserRepository : BaseRepository<User>, IUserRepository
             .ToListAsync();
     }
 
-    public async Task<List<User>> GetActiveAdminsByGroup(
+    public async Task<List<User>> GetUsersBy(
         UserGroup userGroup,
-        UserState activeUserState)
+        UserState userState)
     {
         return await Entities
             .AsNoTracking()
             .Where(u => u.UserGroupId == userGroup.Id &&
-                        u.UserState!.Id == activeUserState.Id)
+                        u.UserState!.Id == userState.Id)
             .ToListAsync();
     }
 

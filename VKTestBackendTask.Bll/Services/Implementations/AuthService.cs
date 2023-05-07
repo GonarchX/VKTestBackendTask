@@ -71,10 +71,8 @@ public class AuthService : IAuthService
 
         var userState = await _userStateRepository.GetByCode(UserStateCode.Active.ToString());
 
-        if (userGroup.Code == UserGroupCode.Admin.ToString() &&
-            await IsLimitByAdmins(userGroup, userState))
+        if (userGroupCode == UserGroupCode.Admin.ToString() && await IsLimitByAdmins(userGroup, userState!))
             return Errors.User.AdminCountLimitExceeded;
-
 
         var user = new User
         {
@@ -96,7 +94,7 @@ public class AuthService : IAuthService
     // in order not to iterate over the entire user table every time
     private async Task<bool> IsLimitByAdmins(UserGroup userGroup, UserState activeUserState)
     {
-        var admins = await _userRepository.GetActiveAdminsByGroup(userGroup, activeUserState);
+        var admins = await _userRepository.GetUsersBy(userGroup, activeUserState);
 
         return admins.Count >= _applicationOptions.MaxAdminsCount;
     }

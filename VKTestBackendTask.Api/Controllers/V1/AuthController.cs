@@ -1,8 +1,7 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VKTestBackendTask.Api.Contracts.V1.AuthController.Login;
-using VKTestBackendTask.Api.Contracts.V1.AuthController.Register;
+using VKTestBackendTask.Api.Contracts.V1.AuthController;
 using VKTestBackendTask.Bll.Dto.AuthService.Login;
 using VKTestBackendTask.Bll.Dto.AuthService.Register;
 using VKTestBackendTask.Bll.Services.Abstractions;

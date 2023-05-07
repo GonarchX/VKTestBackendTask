@@ -8,6 +8,6 @@ public interface IUserRepository : IBaseRepository<User>
     Task<User?> GetByLogin(string userLogin);
     Task<User?> GetByIdWithFullInfo(long userId);
     Task<List<User>> GetByPageWithFullInfo(int page, int pageSize);
-    Task<List<User>> GetActiveAdminsByGroup(UserGroup userGroup, UserState activeUserState);
+    Task<List<User>> GetUsersBy(UserGroup userGroup, UserState userState);
     Task<User?> GetFullInfoByLogin(string userLogin);
 }
