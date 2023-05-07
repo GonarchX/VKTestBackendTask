@@ -13,7 +13,7 @@ public partial class Errors
 
         public static Error AlreadyExistedUser => Error.Conflict(
             code: "Auth.AlreadyExistedUser",
-            description: "Trying to create user with existed login."
+            description: "Trying to create user with existing login."
         );
     }
 }
